@@ -20,7 +20,7 @@ describe('GET /', () => {
     })
 })
 
-describe.skip('POST login', () => {
+describe('POST login', () => {
     it('should respond with JWT token', () => {
         return supertest(app)
             .post('/api/login')
@@ -63,7 +63,7 @@ describe('GET /api/verify routes', () => {
     })
 })
 
-describe.skip('users lists', () => {
+describe('users lists', () => {
     let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlbW8iLCJpYXQiOjE2MTQwOTY3Mzh9.M6eWaIVMMsBSwa1zS6ySNx56aZks-OiBQiRnDVD6AYA'
     it('POST adds list', () => {
         return supertest(app)
