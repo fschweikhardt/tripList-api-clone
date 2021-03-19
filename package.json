@@ -1,7 +1,7 @@
 {
-  "name": "triplist-api",
-  "version": "1.0.0",
-  "description": "",
+  "name": "triptry-api",
+  "version": "2.0.0",
+  "description": "TripList Clone",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/endpoints.test.js",
