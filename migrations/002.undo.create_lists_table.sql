@@ -1,0 +1,1 @@
+drop table is exists lists_table;
