@@ -8,6 +8,6 @@ INSERT INTO items_table (name, listId) VALUES
 ('Rome', 1),
 ('London', 1),
 ('hike the AT', 2),
-('skiing in CO', 1),
+('skiing in CO', 2),
 ('Ireland', 3),
 ('Costa Rica', 3)
