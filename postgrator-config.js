@@ -9,5 +9,5 @@ module.exports = {
   // "ssl": true,
   ssl: { rejectUnauthorized: false },
   // "sslfactory" : org.postgresql.ssl.NonValidatingFactory,
-  "sslmode" : require
+  // "sslmode" : require
 }

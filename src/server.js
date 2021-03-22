@@ -8,7 +8,7 @@ const db = knex({
   // ssl=true,
   ssl: { rejectUnauthorized: false },
   // sslfactory=org.postgresql.ssl.NonValidatingFactory,
-  sslmode = require
+  // sslmode = require
 })
 
 app.set('db', db)
