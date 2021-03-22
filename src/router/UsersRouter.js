@@ -21,7 +21,10 @@ UsersRouter
     .route('/api/test')
     .post(bodyParser, (req,res,next) => {
         const { username } = req.body
-        res.send(username).status(201)
+        UsersService.checkUsername(req.app.get('db'), username)
+            .then(data => {
+                res.status(201).json(data)
+            })
     })
     .get(bodyParser, (req,res,next) => {
         res.send("working").status(200)
