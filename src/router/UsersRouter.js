@@ -19,6 +19,10 @@ const checkToken = (req,res,next) => {
 
 UsersRouter
     .route('/api/test')
+    .post(bodyParser, (req,res,next) => {
+        const { username } = req.body
+        res.send(username).status(201)
+    })
     .get(bodyParser, (req,res,next) => {
         res.send("working").status(200)
     })
