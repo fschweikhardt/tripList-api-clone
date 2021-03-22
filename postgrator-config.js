@@ -8,6 +8,6 @@ module.exports = {
     : process.env.DATABASE_URL,
   "password": '/CW~)46h9D\kbT#' || 'postgres',
   "ssl": true,
-  "sslfactory" : org.postgresql.ssl.NonValidatingFactory,
+  // "sslfactory" : org.postgresql.ssl.NonValidatingFactory,
   "sslmode" : require
 }
