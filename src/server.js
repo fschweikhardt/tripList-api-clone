@@ -5,7 +5,7 @@ const { PORT, DATABASE_URL } = require('./config')
 const db = knex({
   client: 'pg',
   connection: DATABASE_URL,
-  password: '/CW~)46h9D\kbT#',
+  password: '/CW~)46h9D\kbT#' || 'postgres',
   ssl=true,
   sslfactory=org.postgresql.ssl.NonValidatingFactory,
   sslmode = require
