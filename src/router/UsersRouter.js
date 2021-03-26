@@ -25,10 +25,11 @@ UsersRouter
             .then(data => {
                 console.log(Object.values(data[0]))
                 console.log([username])
-                if (Object.values(data[0]) != [username]) {
-                    return res.status(404).json("no data")
-                }
+                // if (Object.values(data[0]) != [username]) {
+                //     return res.status(404).json("no data")
+                // }
                 if (data) {
+                    logger.info(`${username} logged in`)
                     res.status(201).json(data)
                 } 
             })
