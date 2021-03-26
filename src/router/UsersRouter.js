@@ -23,11 +23,14 @@ UsersRouter
         const { username } = req.body
         UsersService.checkUsername(req.app.get('db'), username)
             .then(data => {
-                if (data !== username) {
+                console.log(Object.values(data[0]))
+                console.log([username])
+                if (Object.values(data[0]) != [username]) {
                     return res.status(404).json("no data")
-                } if (data) {
-                    res.status(201).json(data)
                 }
+                if (data) {
+                    res.status(201).json(data)
+                } 
             })
     })
     .get(bodyParser, (req,res,next) => {
