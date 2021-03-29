@@ -35,7 +35,7 @@ UsersRouter
             })
     })
     .get(bodyParser, (req,res,next) => {
-        res.send("working").status(200)
+        res.status(200).send("working")
     })
 
 UsersRouter
