@@ -12,11 +12,24 @@ const db = knex({
   client: 'pg',
   connection: {
     connectionString: DATABASE_URL,
-    ssl:{
-      rejectUnauthorized: false
-    }
+    // ssl:{
+    //   rejectUnauthorized: false
+    // }
+    ssl: true
   }
 })
+
+// var knex = require('knex')({
+//   client: 'pg',
+//   connection: {
+//     host : '5432',
+//     user: user,
+//     database : 'databasename',
+//     password : 'your_database_password',
+//     database : 'myapp_test',
+//     ssl: true
+//   }
+// });
 
 app.set('db', db)
 
