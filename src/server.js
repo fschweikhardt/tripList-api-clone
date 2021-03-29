@@ -1,20 +1,18 @@
 const knex = require('knex')
 const app = require('./app')
-const { PORT, DATABASE_URL } = require('./config')
-
-// const db = knex({
-//   client: 'pg',
-//   connection: process.env.DATABASE_URL,
-//   ssl: false
-// })
+const { PORT } = require('./config')
 
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: DATABASE_URL,
-    ssl:{
-      rejectUnauthorized: false
-    }
+      host : '5432',
+      user: user,
+      database : 'databasename',
+      password : process.env.password,
+      database : 'myapp_test',    
+      ssl:{
+        rejectUnauthorized: false
+      }
   }
 })
 

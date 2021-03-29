@@ -23,19 +23,19 @@ UsersRouter
         const { username } = req.body
         UsersService.checkUsername(req.app.get('db'), username)
             .then(data => {
-                console.log(Object.values(data[0]))
-                console.log([username])
-                // if (Object.values(data[0]) != [username]) {
-                //     return res.status(404).json("no data")
-                // }
+                if (!data) {
+                    return res.status(400).send('something went wrong')
+                }
                 if (data) {
                     logger.info(`${username} logged in`)
                     res.status(201).json(data)
                 } 
             })
+            .catch(next)
     })
     .get(bodyParser, (req,res,next) => {
         res.status(200).send("working")
+        .catch(next)
     })
 
 UsersRouter
