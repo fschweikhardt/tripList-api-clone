@@ -24,7 +24,7 @@ const db = knex({
 //     host : '5432',
 //     user: user,
 //     database : 'databasename',
-//     password : 'your_database_password',
+       password : process.env.password,
 //     database : 'myapp_test',
 //     ssl: true
 //   }
