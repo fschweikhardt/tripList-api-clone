@@ -3,14 +3,22 @@ const logger = require('./logger')
 
 function validateBearerToken(req, res, next) {
   const authToken = req.get('Authorization')
-  let split = authToken.split(' ')[1]
-  
-  if (!authToken || Number(split) !== Number(API_TOKEN)) {
-    logger.error(`Unauthorized request to path: ${req.path}`)
+  if (!authToken) {
+    logger.error(`No authToken - request to path: ${req.path}`)
     return res.status(401).json({ 
       error: 'Unauthorized request' 
     })
   }
+
+  let split = authToken.split(' ')[1]
+
+  if (Number(split) !== Number(API_TOKEN)) {
+    logger.error(`No token match - request to path: ${req.path}`)
+    return res.status(401).json({ 
+      error: 'Unauthorized request' 
+    })
+  }
+
   next()
 }
 
