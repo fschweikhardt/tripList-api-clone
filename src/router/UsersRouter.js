@@ -44,7 +44,10 @@ UsersRouter
         const { email, username, password } = req.body
         const new_user = { email, username, password }
         UsersService.checkUsername(req.app.get('db'), new_user.username )
-            .then (data => {
+            .then(data => {
+                if (!data) {
+                    return res.status(400).send('no data')
+                }
                 res.status(201).json(data)
             })
             .then(username => {
