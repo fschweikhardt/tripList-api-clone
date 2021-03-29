@@ -23,52 +23,93 @@ UsersRouter
         const { username } = req.body
         UsersService.checkUsername(req.app.get('db'), username)
             .then(data => {
-                if (!data) {
-                    return res.status(400).send('something went wrong')
+                console.log(data)
+                if (Object.values(data).length === 0) {
+                    logger.error('test error')
+                    return res.status(404).send('no username')  
                 }
-                if (data) {
-                    logger.info(`${username} logged in`)
-                    res.status(201).json(data)
-                } 
+                logger.info(`${username} on test`)
+                res.status(201).json(data)
+                
             })
             .catch(next)
     })
     .get(bodyParser, (req,res,next) => {
-        res.status(200).send("working")
+        res.status(200).send('working')
         .catch(next)
     })
 
 UsersRouter
     .route('/api/register')
     .post(bodyParser, (req,res,next) => {
-        const { email, username, password } = req.body
-        const new_user = { email, username, password }
-        UsersService.checkUsername(req.app.get('db'), new_user.username )
-            .then(data => {
-                if (!data) {
-                    return res.status(400).send('no data')
-                }
-                res.status(201).json(data)
+        const { username, password, email } = req.body
+        const new_user = { username, password, email }
+        
+        for (const field of ['username', 'password', 'email'])
+            if (!req.body[field])
+                return res.status(400).json({
+                  error: `Missing '${field}' field`
             })
-            .then(username => {
-                if (username.length == 0 || username == undefined) {
-                    bcrypt.hash(new_user.password, 4, function (err, hash) {
-                        if (err) return next(err)
-                        new_user.password = hash
-                        UsersService.newUser(req.app.get('db'), new_user)
-                            .then(user => {
-                                logger.info(`${new_user.username} registered`)
-                                res.json(user).status(201)
-                            })
-                        })
-                }  else if (username) {
-                        return res.status(404).json({
-                            error: { message: `Username already exists` }
-                    })  
+        
+        UsersService.getUser(req.app.get('db'), new_user.username)
+            .then( data => {
+                if (data[0].id) {
+                    return res.status(400).send('already exists')
                 }
+                console.log('getUser', data)
+                res.status(200).send('ok')
             })
-            .catch(next)
-        })
+        //return res.send('ok')
+    })
+        
+
+        // const { email, username, password } = req.body
+        // const new_user = { email, username, password }
+        // UsersService.checkUsername(req.app.get('db'), new_user.username )
+        //     .then(data => {
+        //         console.log(data[0].username)
+        //             if (data[0].username === username) {
+        //                 logger.error(`${username} already exists`)
+        //                 return res.status(400).send(`${username} already exists`)
+        //             }
+        //         })
+        //     .then(data => {
+        //         logger.info(`passed error, ${data}`)
+        //         console.log(`passed error, ${data}`)
+        //             bcrypt.hash(new_user.password, 4, function (err, hash) {
+        //                 if (err) return next(err)
+        //                 new_user.password = hash
+        //                 UsersService.newUser(req.app.get('db'), new_user)
+        //                     .then(user => {
+        //                         console.log(user)
+        //                         logger.info(`${new_user.username} registered`)
+        //                         res.json(user).status(201)
+        //                     })
+                        
+        //             })
+        //     })
+        //.catch(next)
+           
+
+            // .then(username => {
+            //     if (username.length == 0 || username == undefined) {
+            //         bcrypt.hash(new_user.password, 4, function (err, hash) {
+            //             if (err) return next(err)
+            //             new_user.password = hash
+            //             UsersService.newUser(req.app.get('db'), new_user)
+            //                 .then(user => {
+            //                     logger.info(`${new_user.username} registered`)
+            //                     res.json(user).status(201)
+            //                 })
+            //             })
+            //     }  else if (username) {
+            //             return res.status(404).json({
+            //                 error: { message: `Username already exists` }
+            //         })  
+            //     }
+            // })
+        //     .catch(next)
+        // })
 
 UsersRouter
     .route('/api/login')

@@ -2,3 +2,36 @@
 {"message":"demo logged in","level":"info"}
 {"message":"Nick logged in","level":"info"}
 {"message":"demo logged in","level":"info"}
+{"message":" on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"HR on test","level":"info"}
+{"message":"demo on test","level":"info"}
+{"message":"test err","level":"error"}
+{"message":"demo on test","level":"info"}
+{"message":"test err","level":"error"}
+{"message":"demo on test","level":"info"}
+{"message":" on test","level":"info"}
+{"message":" on test","level":"info"}
+{"message":" on test","level":"info"}
+{"message":" on test","level":"info"}
+{"message":"ty on test","level":"info"}
+{"message":"test err","level":"error"}
+{"message":"test err","level":"error"}
+{"message":"test err","level":"error"}
+{"message":"Tim on test","level":"info"}
+{"message":"Tim on test","level":"info"}
+{"message":"Tim on test","level":"info"}
+{"message":"Timw on test","level":"info"}
+{"message":"Timw on test","level":"info"}
+{"message":"test error","level":"error"}
+{"message":"Tim on test","level":"info"}
+{"message":"Timr on test","level":"info"}
+{"message":"test error","level":"error"}
+{"message":"username already exists","level":"error"}
+{"message":"passed error, [object Object]","level":"info"}
+{"message":"Tim already exists","level":"error"}
+{"message":"Tim already exists","level":"error"}
