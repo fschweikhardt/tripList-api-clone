@@ -40,3 +40,14 @@
 {"message":"LNHJKLL registered","level":"info"}
 {"message":"opop registered","level":"info"}
 {"message":"demo logged in","level":"info"}
+{"message":"demo logged in","level":"info"}
+{"message":"demo logged in","level":"info"}
+{"message":"RTRT registered","level":"info"}
+{"message":"RTRT logged in","level":"info"}
+{"message":"wes logged in","level":"info"}
+{"message":"demo logged in","level":"info"}
+{"message":"wes logged in","level":"info"}
+{"message":"wes new item: France w/ listId: 197","level":"info"}
+{"message":"No token match - request to path: /api/test","level":"error"}
+{"message":"No token match - request to path: /api/verifyId","level":"error"}
+{"message":"No token match - request to path: /api/verifyId","level":"error"}

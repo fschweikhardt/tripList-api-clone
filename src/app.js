@@ -23,9 +23,10 @@ app.use(
       origin: CLIENT_ORIGIN
   })
 );
+
 //app.use(validateBearerToken)
  
-app.use(UsersRouter)
+app.use('/api', UsersRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello, TripList!')

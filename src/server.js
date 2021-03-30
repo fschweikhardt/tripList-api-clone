@@ -1,20 +1,21 @@
 const knex = require('knex')
 const app = require('./app')
-const { PORT, DATABASE_URL } = require('./config')
+const { PORT } = require('./config')
 
 const db = knex({
   client: 'pg',
   ssl: { rejectUnauthorized: false },
-  connection: DATABASE_URL,
+  //connection: DATABASE_URL,
+  //heroku connection
+  connection: {
+      host : 'ec2-18-233-83-165.compute-1.amazonaws.com',
+      user: 'zkwnrvbuimcdel',
+      database : 'd3qj30j6aiscv',
+      password : '3ba026693655b972b960d98011aa6cf586edafd4478c834a229722864f4e4e80',
+    }
 })
 
-//heroku connection
-  // connection: {
-  //   host : 'ec2-18-233-83-165.compute-1.amazonaws.com',
-  //   user: 'zkwnrvbuimcdel',
-  //   database : 'd3qj30j6aiscv',
-  //   password : '3ba026693655b972b960d98011aa6cf586edafd4478c834a229722864f4e4e80',
-  // }
+  
 
 app.set('db', db)
 

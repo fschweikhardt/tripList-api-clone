@@ -18,7 +18,7 @@ const checkToken = (req,res,next) => {
 }
 
 UsersRouter
-    .route('/api/test')
+    .route('/test')
     .post(bodyParser, (req,res,next) => {
         const { username } = req.body
         UsersService.checkUsername(req.app.get('db'), username)
@@ -36,11 +36,11 @@ UsersRouter
     })
     .get(bodyParser, (req,res,next) => {
         res.status(200).send('working')
-        .catch(next)
+        next()
     })
 
 UsersRouter
-    .route('/api/register')
+    .route('/register')
     .post(bodyParser, (req,res,next) => {
         const { username, password, email } = req.body
         const new_user = { username, password, email }
@@ -124,7 +124,7 @@ UsersRouter
         // })
 
 UsersRouter
-    .route('/api/login')
+    .route('/login')
     .post(bodyParser, (req,res,next) => {
         const { username, password } = req.body
         const login_user = { username, password }
@@ -169,68 +169,71 @@ UsersRouter
     })
 
 UsersRouter
-    .route('/api/verifyId')
-    .get( checkToken, (req,res,next) => {
+    .route('/verifyId')
+    .get(checkToken, (req,res,next) => {
         const { username } = req.user
-        res.json(username).status(200)
+        console.log('V-id', username)
+        res.status(200).json(username)
         next()
     })
 
 UsersRouter
-    .route('/api/verifyLists')
-    .get( checkToken, (req,res,next) => {
+    .route('/verifyLists')
+    .get(checkToken, (req,res,next) => {
         const { username } = req.user
+        console.log('V-list', username)
         UsersService.seedUserLists(req.app.get('db'), username)
             .then(data => {
-                res.json(data).status(200)
+                console.log(data)
+                if (!data) {
+                    logger.error('verifyList err')
+                    return res.status(400).json({
+                        error: '!data on seedUserLists'
+                    })
+                }
+                return res.status(200).json(data)
             })
             .catch(next)
     })
 
 UsersRouter
-    .route('/api/verifyItems')
+    .route('/verifyItems')
     .get( checkToken, (req,res,next) => {
         const { username } = req.user
         UsersService.seedUserItems(req.app.get('db'), username)
             .then(data => {
-                res.json(data).status(200)
+                res.status(200).json(data)
             })
             .catch(next)
 })
 
 UsersRouter
-    .route('/api/lists')
+    .route('/lists')
     .post(checkToken, bodyParser, (req,res,next) => {
         const { title } = req.body
         const { username } = req.user
-        if (!username) {
-            logger.error('user not verified')
-            res.status(400).res.send('try again')
-        }
         if (!title) {
-            logger.error(`no title`)
-            return res.status(400).res.send('incomplete info')
+            return res.status(400).json({
+                error: 'no title'
+            })
         }
         const newList = { title, username }
-        UsersService.addList(req.app.get('db'), newList)
+        return UsersService.addList(req.app.get('db'), newList)
             .then(data => {
                 logger.info(`POST: ${newList.username}  ${newList.title}`)
-                return res.json(data).status(201)
+                return res.status(201).json(data)
             })
             .catch(next)
     })
     .delete(checkToken, bodyParser, (req,res,next) => {
         const { id } = req.body
         const { username } = req.user
-        if (!username) {
-            logger.error('user not verified')
-            res.status(400).res.send('try again')
-        }
         if (!id) {
-            logger.error('no listId')
-            return res.status(400).res.send('incomplete info')
+            return res.status(400).json({
+                error: 'no id'
+            })
         }
-        UsersService.deleteList(req.app.get('db'), id, username)
+        return UsersService.deleteList(req.app.get('db'), id, username)
             .then(numRowsAffected => {
                 logger.info(`DELETED: list ${id}`)
                 return res.status(204).end()
@@ -239,19 +242,21 @@ UsersRouter
     })
 
 UsersRouter
-    .route('/api/items')
+    .route('/items')
     .post(checkToken, bodyParser, (req,res,next) => {
         const { name, list_id } = req.body
         const { username } = req.user
         if (!name || !list_id) {
             logger.error('no name or list_id on items POST')
-            return res.status(400).send('incomplete info')
+            return res.status(400).json({
+                error: 'no list-id or name'
+            })
         }
         const newItem = { name, list_id }
-        UsersService.addItem(req.app.get('db'), newItem, username)
+        return UsersService.addItem(req.app.get('db'), newItem, username)
             .then(data => {
                 logger.info(`${username} new item: ${newItem.name} w/ listId: ${newItem.list_id}`)
-                return res.json(data).status(201)
+                return res.status(201).json(data)
             })
             .catch(next)
     })
@@ -260,14 +265,18 @@ UsersRouter
         const { username } = req.user
         if (!item_id) {
             logger.error('no item_id on items DELETE')
-            return res.status(400).send('incomplete info')
+            return res.status(400).json({
+                error: 'no item-id'
+            })
         }
-        UsersService.deleteItemVerify(req.app.get('db'), item_id)
+        return UsersService.deleteItemVerify(req.app.get('db'), item_id)
             .then(data => {
                 if (data[0].username !== username) {
-                    return res.status(404).send('no access')
+                    return res.status(404).json({
+                        error: 'no access'
+                    })
                 }
-                UsersService.deleteItemFinish(req.app.get('db'), item_id)
+                return returnUsersService.deleteItemFinish(req.app.get('db'), item_id)
                     .then(numRowsAffected => {
                         logger.info(`DELETED: item ${item_id}`)
                         return res.status(204).end()
