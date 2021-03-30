@@ -51,15 +51,27 @@ UsersRouter
                   error: `Missing '${field}' field`
             })
         
-        UsersService.getUser(req.app.get('db'), new_user.username)
-            .then( data => {
-                if (data[0].id) {
-                    return res.status(400).send('already exists')
+        UsersService.checkUsername(req.app.get('db'), new_user.username)
+            .then( user => { //if the username is availible
+                if (user.length === 0) { //bcrypt new user
+                   return bcrypt.hash(new_user.password, 4, function (err, hash) {
+                        if (err) return next(err)
+                        new_user.password = hash
+                        return UsersService.newUser(req.app.get('db'), new_user)
+                            .then(user => {
+                                console.log(user)
+                                logger.info(`${new_user.username} registered`)
+                                return res.json(user).status(201)
+                            })
+                    })
                 }
-                console.log('getUser', data)
-                res.status(200).send('ok')
+                if (user) { //if the username is taken
+                    return res.status(404).json({
+                        error: { message: `Username already exists` }                
+                    })
+                }
             })
-        //return res.send('ok')
+            .catch(next)
     })
         
 
@@ -76,17 +88,17 @@ UsersRouter
         //     .then(data => {
         //         logger.info(`passed error, ${data}`)
         //         console.log(`passed error, ${data}`)
-        //             bcrypt.hash(new_user.password, 4, function (err, hash) {
-        //                 if (err) return next(err)
-        //                 new_user.password = hash
-        //                 UsersService.newUser(req.app.get('db'), new_user)
-        //                     .then(user => {
-        //                         console.log(user)
-        //                         logger.info(`${new_user.username} registered`)
-        //                         res.json(user).status(201)
-        //                     })
+                    // bcrypt.hash(new_user.password, 4, function (err, hash) {
+                    //     if (err) return next(err)
+                    //     new_user.password = hash
+                    //     UsersService.newUser(req.app.get('db'), new_user)
+                    //         .then(user => {
+                    //             console.log(user)
+                    //             logger.info(`${new_user.username} registered`)
+                    //             res.json(user).status(201)
+                    //         })
                         
-        //             })
+                    // })
         //     })
         //.catch(next)
            
