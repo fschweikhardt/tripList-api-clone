@@ -67,7 +67,7 @@ UsersRouter
                 }
                 if (user) { //if the username is taken
                     return res.status(404).json({
-                        error: { message: `Username already exists` }                
+                        error: 'username already exists'
                     })
                 }
             })
@@ -128,32 +128,44 @@ UsersRouter
     .post(bodyParser, (req,res,next) => {
         const { username, password } = req.body
         const login_user = { username, password }
-        for (const [key, value] of Object.entries(login_user))
-            if (value === null) {
-                logger.error('missing username or password')
-                return res.status(400).json({error: `Missing '${key}' in request body`})
-            }
-            UsersService.getUser(req.app.get('db'),login_user.username )
-                .then(dbUser => {
-                    if (!dbUser) {
-                        logger.error('incorrect username or password')
-                        return res.status(401).json({error: 'Incorrect username or password'})
+        
+        // for (const [key, value] of Object.entries(login_user))
+        //     if (value === null) {
+        //         logger.error('missing username or password')
+        //         return res.status(400).json({error: `Missing '${key}' in request body`})
+        // }
+
+        for (const field of ['username', 'password'])
+            if (!req.body[field])
+                return res.status(400).json({
+                    error: `Missing '${field}' field`
+                })
+        
+        UsersService.getUser(req.app.get('db'),login_user.username )
+            .then(dbUser => {
+                if (!dbUser) {
+                    return res.status(401).json({
+                        error: 'Incorrect username or password'})
                     }
-                    return UsersService.comparePasswords(login_user.password, dbUser[0].password)
-                        .then(compareMatch => {
-                            if (!compareMatch) {
-                                logger.error('incorrect username or password')
-                                return res.status(401).json({error: 'Incorrect username or password',})
-                            }
-                            const payload = { username: dbUser[0].username }
-                            const token = jwt.sign( payload, JWT_SECRET )
-                            res.json({ authToken: token }).status(200)
-                            logger.info(`${payload.username} logged in`)
-                            console.log( payload, token )
-                        })
-                        .catch(next)
-                        })
-                .catch(next)    
+
+                return UsersService.comparePasswords(login_user.password, dbUser[0].password)
+                    .then(compareMatch => {
+                        if (!compareMatch) {
+                            logger.error('incorrect username or password')
+                            return res.status(401).json({
+                                error: 'Incorrect username or password'
+                            })
+                        }
+                        const payload = { username: dbUser[0].username }
+                        const token = jwt.sign( payload, JWT_SECRET )
+                        logger.info(`${payload.username} logged in`)
+                        console.log( payload, token )
+                        return res.status(200).json({ authToken: token })
+                        
+                    })
+                    .catch(next)
+                    })
+            .catch(next)    
     })
 
 UsersRouter
